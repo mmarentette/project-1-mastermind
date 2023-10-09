@@ -4,6 +4,7 @@ console.log('app.js is loading!')
 
 /*----- constants -----*/
 // Define the maximum number of guesses allowed
+// Define the array of 8 colours to choose from
 
 
 /*----- state variables -----*/
