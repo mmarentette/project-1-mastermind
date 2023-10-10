@@ -12,8 +12,8 @@ body {
 }
 
 header {
-    margin: 3vh auto;
-    font-size: 3vh;
+    margin: 1vh auto;
+    font-size: 5vh;
     background-color: pink;
 }
 
@@ -35,6 +35,11 @@ main * {
     display: flex;
     justify-content: center;
     align-content: center;
+}
+
+#message {
+    /* margin: 1vh auto 1vh; */
+    background-color: aquamarine;
 }
 
 #secret-code {
