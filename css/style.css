@@ -21,11 +21,12 @@ main {
     display: grid;
     /* grid-template-columns: repeat(5, 5vh); */
     grid-template-columns: 24vh 6vh;
-    grid-template-rows: 6vh 60vh 12vh;
+    grid-template-rows: 6vh 60vh 12vh 6vh;
     grid-template-areas:
     "secret-code ."
     "board results"
-    "colors .";
+    "colors ."
+    "check-button check-button";
     gap: 1vh;
     background-color: lightgreen;
 }
@@ -38,7 +39,7 @@ main * {
 
 #secret-code {
     grid-area: secret-code;
-    background-color: blue;
+    background-color: darkgrey;
     display: grid;
     grid-template-columns: repeat(4, 5vh);
     grid-template-rows: 5vh;
@@ -71,7 +72,7 @@ main * {
     background-color: blueviolet;
 }
 
-#colors {
+#color-choices {
     grid-area: colors;
     display: grid;
     grid-template-columns: repeat(4, 5vh);
@@ -80,7 +81,22 @@ main * {
     background-color: lavender;
 }
 
-#board > div, #secret-code > div, #colors > div, [id^="result-"] > div {
+#board > div, #secret-code > div, #color-choices > div, [id^="result-"] > div {
     border: 0.1vh solid grey;
     border-radius: 50%;
+}
+
+#color-choices > div:hover {
+    cursor: pointer;
+}
+
+#check {
+    grid-area: check-button;
+    border: 0.3vh solid grey;
+    align-self: center;
+    padding: 1vh;
+    border-radius: 2vh;
+    background-color: lightgrey;
+    font-size: 3vh;
+    cursor: pointer;
 }
