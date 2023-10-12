@@ -1,7 +1,9 @@
 // See wireframe here:
 // https://miro.com/app/board/uXjVNdHUIDI=/?share_link_id=168631429658
 
-// Bugs: Need to add guard to checkBtn so that it can only be clicked after 4 colors have been selected (enhancement: button greyed out otherwise?)
+// Bugs:
+// Need to add guard to checkBtn so that it can only be clicked after 4 colors have been selected (enhancement: button greyed out otherwise?)
+// Need to fix checkWin so that the success pegs render first
 
 /*----- constants -----*/
 // Define the maximum number of guesses allowed
@@ -60,7 +62,7 @@ init();
 // init function to initialize state of the game
 function init() {
     currentGuess = [];
-    currentSuccess = {};
+    currentSuccess = [];
     // Start with an empty array for guessHistory. For each turn, add new 4-element array representing each guess to beginning of array
     guessHistory = [];
     // Start with an empty object, which will eventually have two properties ('r' and 'w') with values of arrays
@@ -94,6 +96,7 @@ function render() {
     renderColorChoices();
     renderSecretCode();
     renderCell();
+    renderResults();
     renderMessage();
 }
 
@@ -125,6 +128,14 @@ function renderCell() {
     if (cellEl) cellEl.style.backgroundColor = colorChoice;
 }
 
+function renderResults() {
+    currentSuccess.forEach((successColor, idx) => {
+        const resultsId = `r${successHistory.length - 1}-${idx}`;
+        const resultsEl = document.getElementById(resultsId);
+        resultsEl.style.backgroundColor = successColor;
+    })
+}
+
 // Render message if user has won
 function renderMessage() {
     messageEl.innerText = message;
@@ -139,35 +150,38 @@ function handleChoice(e) {
         colorChoice = e.target.style.backgroundColor;
         currentGuess.push(colorChoice); 
     }
-    render(); // Question: Can I call renderCell() here instead of render to save processing time?
+    renderCell(); // Question: Can I call renderCell() here instead of render to save processing time?
 }
 
 // checkWin function to compare currentGuess to secretCode
 function checkWin() {
+    // Iterate over secretCode to generate array of red and white 'results' pegs
+    secretCode.forEach((color, idx) => {
+        // In the guess, if the correct color is at the correct index...
+        if (currentGuess[idx] === color) {
+            // add 1 to the red count in successTurn
+            currentSuccess.push('red');
+        } else if (currentGuess.includes(color)) {
+            // else, add 1 to the white count in successTurn
+            currentSuccess.push('white');
+        }
+        currentSuccess.sort();
+        // To do (medium): generate function to shuffle array for random results order
+    });
+
     // If the currentGuess matches the secretCode, update to a win message and render it
     if (currentGuess.join() === secretCode.join()) {
         message = 'Congrats - you guessed the secret code!';
-        render();
-        return;
     }
 
-    // if any of the currentGuess colours match the secretCode colours, then:
-    secretCode.forEach((color, idx) => {
-        if (currentGuess[idx] === color) {
-            // if they also match the index, add 1 to the red count in successTurn
-            currentSuccess.r ? currentSuccess.r += 1 : currentSuccess.r = 1;
-        } else if (currentGuess.includes(color)) {
-            // else, add 1 to the white count in successTurn
-            currentSuccess.w ? currentSuccess.w += 1 : currentSuccess.w = 1;
-        }
-    });
-
     // Add currentGuess to guessHistory array and add currentSuccess to successHistory array
-    guessHistory.unshift(currentGuess);
-    successHistory.unshift(currentSuccess);
+    guessHistory.push(currentGuess);
+    successHistory.push(currentSuccess);
 
     // Reset currentGuess to empty array and currentSuccess to empy object for next guess
     currentGuess = [];
-    currentSuccess = {};
+    
     render();
+
+    currentSuccess = []; // To do (medium): Fix this so that it appears above render
 }
