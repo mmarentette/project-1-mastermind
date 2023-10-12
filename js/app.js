@@ -2,7 +2,6 @@
 // https://miro.com/app/board/uXjVNdHUIDI=/?share_link_id=168631429658
 
 // Ice box:
-// High priority: Update and render to 'lose' message if user has made all 10 guesses without getting the secretCode
 // High priority: 'Hide' the secretCode and only render after the user has won OR after 10 guesses have been made.
 // Medium priority: Allow users to clear currentGuess, as long as they have not yet clicked checkBtn
 // Low priority: Grey out check guess button is not clickable if <4 colors selected in currentGuess
@@ -168,6 +167,12 @@ function handleChoice(e) {
 function handleGuess() {
     // Guard to prevent guess from being processed unless currentGuess is exactly 4 elements
     if (currentGuess.length !== 4) return;
+
+    // Reset currentSuccess to empty array
+    currentSuccess = [];
+    // Add currentGuess to guessHistory array and add currentSuccess to successHistory array
+    guessHistory.push(currentGuess);
+    successHistory.push(currentSuccess);
     // Iterate over secretCode to generate array of red and white 'results' pegs
     secretCode.forEach((color, idx) => {
         // In the guess, if the correct color is at the correct index...
@@ -182,23 +187,21 @@ function handleGuess() {
         currentSuccess.sort();
     });
 
-    // If the currentGuess matches the secretCode, update to a win message and render it
+    // If the currentGuess matches the secretCode, update to a win message
     if (currentGuess.join() === secretCode.join()) {
         message = 'Congrats - you guessed the secret code!';
+    // Else if user has made all 10 guesses without getting the secretCode, update to a lose message
+    } else if (guessHistory.length === MAX_GUESSES) {
+        message = 'No more guesses left - you lose!';
+    // Otherwise, update to a try again message
     } else {
-        message = 'Wrong - try again!'
+        message = 'Not quite - try again!';
     }
-
-    // Add currentGuess to guessHistory array and add currentSuccess to successHistory array
-    guessHistory.push(currentGuess);
-    successHistory.push(currentSuccess);
 
     // Reset currentGuess and currentSuccess to empty arrays to store data for next guess
     currentGuess = [];
     
     render();
-
-    currentSuccess = []; // To do (medium): Fix this so that it appears above render
 }
 
 function handleReset() {
