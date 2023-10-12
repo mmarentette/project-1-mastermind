@@ -3,6 +3,7 @@
 
 // Ice box:
 // High priority: 'Hide' the secretCode and only render after the user has won OR after 10 guesses have been made.
+// touch README.md (md = markdown) file in root directory
 // Medium priority: Allow users to clear currentGuess, as long as they have not yet clicked checkBtn
 // Low priority: Grey out check guess button is not clickable if <4 colors selected in currentGuess
 // Low priority: Prevent users from being able to select more colors (render to game board) after they have won
@@ -16,13 +17,14 @@ const MAX_GUESSES = 10;
 const COLORS = ['red', 'darkorange', 'yellow', 'green', 'blue', 'aqua','purple', 'hotpink']
 // Define the length of the secret code
 const SECRET_CODE_LENGTH = 4;
+const SECRET_COLOR_DISPLAY = 'black'; // PACEMAKER
 
 
 /*----- state variables -----*/
 // secretCode array to represent the randomly-generated colour pattern
 let secretCode;
-// secretCode display to represent whether grey circles or coloured circles should be displayed to user
-let secretCodeDisplay;
+// secretCodeDisplay array to represent whether grey circles or coloured circles should be displayed to user
+let secretCodeDisplay; // PACEMAKER
 // currentGuess array to represent the array of user-selected colours in the current turn
 let currentGuess;
 // guessHistory two-dimensional array to keep track of user guesses, one nested array for each guess
@@ -85,6 +87,7 @@ function init() {
     colorChoice = '';
     // Call a function that generates a secret color pattern
     generateSecretCode();
+    generateSecretCodeDisplay();
 
     render();
 }
@@ -102,6 +105,10 @@ function generateSecretCode() {
         // Remove this randColor from remainingColors array so that each color can only appear once in the secretCode
         remainingColors.splice(remainingColors.indexOf(randColor), 1);
     };
+}
+
+function generateSecretCodeDisplay() {
+    secretCodeDisplay = Array.from({ length:4 }, (x) => SECRET_COLOR_DISPLAY)
 }
 
 // render function to render state to the DOM
@@ -123,7 +130,7 @@ function renderColorOptions() {
 // We'll render the secretCode at the top of the board for now to make testing easier. Later, we will have to 'hide' the secretCode and only render after the user has won OR after 10 guesses have been made.
 function renderSecretCode() {
     secretCodeArr.forEach((secretCodeDiv, idx) => {
-        secretCodeDiv.style.backgroundColor = secretCode[idx];
+        secretCodeDiv.style.backgroundColor = secretCodeDisplay[idx];
     })
 }
 
@@ -196,7 +203,7 @@ function processResults() {
                 // else, add 1 to the white count in successTurn
                 currentResults.push('white');
             }
-            // Sort currentResults array so that red pegs always appear first and white pegs always appear last. This also re-shuffles the array so that the user does not get an unfair advantage about the location of correct/incorrect colors in their guess
+            // Sort currentResults array so that red pegs always appear first and white pegs always appear last. This also shuffles the array so that the user does not get an unfair advantage about the location of correct/incorrect colors in their guess
             currentResults.sort();
         });
 }
@@ -205,9 +212,11 @@ function updateMessage() {
     // If the currentGuess matches the secretCode, update to a win message
     if (currentGuess.join() === secretCode.join()) {
         message = 'Congrats - you guessed the secret code!';
+        secretCodeDisplay = secretCode.slice(); // PACEMAKER
     // Else if user has made all 10 guesses without getting the secretCode, update to a lose message
     } else if (guessHistory.length === MAX_GUESSES) {
         message = 'No more guesses left - you lose!';
+        secretCodeDisplay = secretCode.slice(); // PACEMAKER
     // Otherwise, update to a try again message
     } else {
         message = 'Not quite - try again!';
