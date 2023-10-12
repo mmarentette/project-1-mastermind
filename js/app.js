@@ -3,7 +3,6 @@
 
 // Bugs:
 // Need to add guard to checkBtn so that it can only be clicked after 4 colors have been selected (enhancement: button greyed out otherwise?)
-// Need to fix checkWin so that the success pegs render first
 
 /*----- constants -----*/
 // Define the maximum number of guesses allowed
@@ -23,10 +22,10 @@ let currentGuess;
 let guessHistory;
     // userTurns = guessHistory.length
     // currentGuess = guessHistory.shift() -> To do (low priority): Can we use this instead of creating a separate currentGuess variable?
-// successHistory object to keep track of user successes per guess: 'r' property stores an array of red 'pegs' per guess (correct colour and index) and 'w' property stores an array of white 'pegs' per guess (correct colour, but not index)
 let currentSuccess;
+// successHistory two-dimensional array to keep track of user successes, one nested array for each guess: 'red' indicates a red results peg (correct colour and index) and 'white' indicates a white results peg (correct colour, but not index)
 let successHistory;
-    // currentSuccess = successHistory.shift()
+    // currentSuccess = successHistory.shift() -> To do (low priority): Use this instead of current Success variable?
 // message variable to display winning message
 let message;
 // colorChoice variable to temporarily store each color being chosen by user before being rendered to board

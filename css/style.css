@@ -12,23 +12,24 @@ body {
 }
 
 header {
-    margin: 1vh auto;
-    font-size: 5vh;
-    background-color: pink;
+    margin: 1vh auto 0vh;
+    font-size: 6vh;
+    font-family: 'Righteous', sans-serif;
 }
 
 main {
     display: grid;
     /* grid-template-columns: repeat(5, 5vh); */
     grid-template-columns: 24vh 6vh;
-    grid-template-rows: 6vh 60vh 12vh 6vh;
+    grid-template-rows: 6vh 60vh 12vh;
     grid-template-areas:
     "secret-code ."
     "board results"
-    "colors ."
-    "check-button check-button";
+    "colors .";
     gap: 1vh;
-    background-color: lightgreen;
+    background-color: lightgrey;
+    border: solid 1vh darkgrey;
+    border-radius: 3vh;
 }
 
 main * {
@@ -38,22 +39,21 @@ main * {
 }
 
 #message {
-    /* margin: 1vh auto 1vh; */
-    background-color: aquamarine;
+    margin: 0.5vh;
 }
 
 #secret-code {
     grid-area: secret-code;
-    background-color: darkgrey;
     display: grid;
     grid-template-columns: repeat(4, 5vh);
     grid-template-rows: 5vh;
     gap: 1vh;
+    border-radius: 2vh;
+    background-color: darkgrey;
 }
 
 #board {
     grid-area: board;
-    background-color: white;
     display: grid;
     grid-template-columns: repeat(4, 5vh);
     grid-template-rows: repeat(10, 5vh);
@@ -62,11 +62,12 @@ main * {
 
 #results {
     grid-area: results;
-    background-color: red;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     gap: 1vh;
+    border-radius: 2vh;
+    background-color: darkgrey;
 }
 
 #results > section {
@@ -74,7 +75,6 @@ main * {
     grid-template-columns: repeat(2, 2vh);
     grid-template-rows: repeat(2, 2vh);
     gap: 0.5vh;
-    background-color: lightgrey;
 }
 
 #color-choices {
@@ -83,11 +83,12 @@ main * {
     grid-template-columns: repeat(4, 5vh);
     grid-template-rows: repeat(2, 5vh);
     gap: 1vh;
-    background-color: lavender;
+    border-radius: 2vh;
+    background-color: darkgrey;
 }
 
 #board > div, #secret-code > div, #color-choices > div, [id^="result-"] > div {
-    border: 0.1vh solid grey;
+    border: 0.4vh solid grey;
     border-radius: 50%;
 }
 
@@ -97,9 +98,10 @@ main * {
 
 #check {
     grid-area: check-button;
-    border: 0.3vh solid grey;
+    border: solid 1vh darkgrey;
     align-self: center;
     padding: 1vh;
+    margin: 1vh;
     border-radius: 2vh;
     background-color: lightgrey;
     font-size: 3vh;
