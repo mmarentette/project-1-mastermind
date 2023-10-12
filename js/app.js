@@ -2,7 +2,13 @@
 // https://miro.com/app/board/uXjVNdHUIDI=/?share_link_id=168631429658
 
 // Ice box:
-// Make check guess button not clickable if <4 colors selected in currentGuess
+// High priority: Update and render to 'lose' message if user has made all 10 guesses without getting the secretCode
+// High priority: 'Hide' the secretCode and only render after the user has won OR after 10 guesses have been made.
+// Medium priority: Allow users to clear currentGuess, as long as they have not yet clicked checkBtn
+// Low priority: Grey out check guess button is not clickable if <4 colors selected in currentGuess
+// Low priority: Prevent users from being able to select more colors (render to game board) after they have won
+// Low priority: Allow users to choose easy or difficult mode; difficult mode would allow each color to appear 1+ times in the secretCode.
+// Low priority (or perhaps not needed): Listen for a click in the startGame button and handleNewGame
 
 /*----- constants -----*/
 // Define the maximum number of guesses allowed
@@ -33,8 +39,8 @@ let colorChoice;
 
 
 /*----- cached elements  -----*/
-// Store the color choice array (colorChoiceArr) that contains the 8 clickable colour elements at the bottom of the board
-const colorChoiceArr = [...document.querySelectorAll('#color-choices > div')];
+// Store the color choice array (colorOptionsArr) that contains the 8 clickable colour elements at the bottom of the board
+const colorOptionsArr = [...document.querySelectorAll('#color-choices > div')];
 // Store the color choice section (to be used in event listener)
 const colorsSectionEl = document.getElementById('color-choices');
 // Store the secret code array (secretCodeArr) at the top of the board
@@ -43,12 +49,17 @@ const secretCodeArr = [...document.querySelectorAll('#secret-code > div')];
 const checkBtn = document.getElementById('check');
 // Store the message element that displays the win message
 const messageEl = document.getElementById('message');
-// To do (medium priority): Store the button (resetBtnEl) that resets the game
+// Store the button (resetBtn) that resets the game
+const resetBtn = document.getElementById('reset');
+// Store all elements inside the board in an array
+const boardDivsArr = [...document.querySelectorAll('#board > div')];
+// Store all elements in the results section in an array
+const resultsDivArr = [...document.querySelectorAll('#results > section > div')];
 
 
 /*----- event listeners -----*/
-// To do (medium priority): Listen for a click in the startGame button and handleNewGame
-// To do (medium priority): Listen for a click in the resetBtnEl and handleNewGame
+// Listen for a click in the resetBtnEl and handleReset
+resetBtn.addEventListener('click', handleReset);
 // Listen for a click in the colorsSectionEl and handleChoice
 colorsSectionEl.addEventListener('click', handleChoice);
 // Listen for a click in the checkBtnEl and handleGuess
@@ -63,12 +74,13 @@ function init() {
     // Start with empty arrays for currentGuess and currentSuccess
     currentGuess = [];
     currentSuccess = [];
-    // Start with an empty array for guessHistory. For each turn, add new 4-element array representing each guess to beginning of array
+    // Start with an empty array for guessHistory. For each turn, add new 4-element array representing each guess to end of 2D array
     guessHistory = [];
-    // Start with an empty object, which will eventually have two properties ('r' and 'w') with values of arrays
+    // Start with an empty for successHistory. For each turn, add a new array with up to 4 elements representing the results for each guess, to the end of 2D array
     successHistory = [];
-    // Clear the message
-    message = '';
+    // Start with an intro message
+    message = 'Guess the secret code!';
+    // Clear colorChoice
     colorChoice = '';
     // Call a function that generates a secret color pattern
     generateSecretCode();
@@ -80,9 +92,9 @@ function generateSecretCode() {
     // Set the secretCode to an empty array
     secretCode = [];
     // Set temporary variable of remainingColors, which we will modify each time the loop is run by removing a color from this array after it is added to the secret code. This ensures each color only appears once in the secret code (easy mode for game play) and will make white/red peg calculations easier for now.
-    // To do (low priority): Allow users to choose easy or difficult mode; difficult mode would allow each color to appear 1+ times in the secretCode.
     let remainingColors = COLORS.slice();
     for (let i = 0; i < SECRET_CODE_LENGTH; i++) {
+        // Generate a random color from the remainingColors array
         const randColor = remainingColors[Math.floor(Math.random() * remainingColors.length)]
         // Add randColor to secret Code array.
         secretCode.push(randColor);
@@ -93,16 +105,16 @@ function generateSecretCode() {
 
 // render function to render state to the DOM
 function render() {
-    renderColorChoices();
+    renderColorOptions();
     renderSecretCode();
     renderCell();
     renderResults();
     renderMessage();
 }
 
-// Render color choices at bottom of board
-function renderColorChoices() {
-    colorChoiceArr.forEach((color, idx) => {
+// Render color options at bottom of board
+function renderColorOptions() {
+    colorOptionsArr.forEach((color, idx) => {
         color.style.backgroundColor = COLORS[idx];
     })
 }
@@ -142,8 +154,6 @@ function renderMessage() {
     messageEl.innerText = message;
 }
 
-// To do (medium priority): handleNewGame function to randomly generate the secretCode and render initial state of the game
-
 // handleChoice function to create currentGuess array
 function handleChoice(e) {
     if (e.target.tagName !== 'DIV') return;
@@ -168,13 +178,15 @@ function handleGuess() {
             // else, add 1 to the white count in successTurn
             currentSuccess.push('white');
         }
+        // Sort currentSuccess array so that red pegs always appear first and white pegs always appear last. This also re-shuffles the array so that the user does not get an unfair advantage about the location of correct/incorrect colors in their guess
         currentSuccess.sort();
-        // To do (medium): generate function to shuffle array for random results order
     });
 
     // If the currentGuess matches the secretCode, update to a win message and render it
     if (currentGuess.join() === secretCode.join()) {
         message = 'Congrats - you guessed the secret code!';
+    } else {
+        message = 'Wrong - try again!'
     }
 
     // Add currentGuess to guessHistory array and add currentSuccess to successHistory array
@@ -187,4 +199,16 @@ function handleGuess() {
     render();
 
     currentSuccess = []; // To do (medium): Fix this so that it appears above render
+}
+
+function handleReset() {
+    clearColors(boardDivsArr);
+    clearColors(resultsDivArr);
+    init();
+}
+
+function clearColors(divArr) {
+    divArr.forEach((div) => {
+        div.style.backgroundColor = '';
+    })
 }
