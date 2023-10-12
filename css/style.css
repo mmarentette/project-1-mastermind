@@ -19,7 +19,6 @@ header {
 
 main {
     display: grid;
-    /* grid-template-columns: repeat(5, 5vh); */
     grid-template-columns: 24vh 6vh;
     grid-template-rows: 6vh 60vh 12vh;
     grid-template-areas:
@@ -50,6 +49,9 @@ main * {
     gap: 1vh;
     border-radius: 2vh;
     background-color: darkgrey;
+}
+
+#secret-code > div {
 }
 
 #board {

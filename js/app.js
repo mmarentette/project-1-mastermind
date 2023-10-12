@@ -1,8 +1,8 @@
 // See wireframe here:
 // https://miro.com/app/board/uXjVNdHUIDI=/?share_link_id=168631429658
 
-// Bugs:
-// Need to add guard to checkBtn so that it can only be clicked after 4 colors have been selected (enhancement: button greyed out otherwise?)
+// Ice box:
+// Make check guess button not clickable if <4 colors selected in currentGuess
 
 /*----- constants -----*/
 // Define the maximum number of guesses allowed
@@ -20,12 +20,12 @@ let secretCode;
 let currentGuess;
 // guessHistory two-dimensional array to keep track of user guesses, one nested array for each guess
 let guessHistory;
-    // userTurns = guessHistory.length
-    // currentGuess = guessHistory.shift() -> To do (low priority): Can we use this instead of creating a separate currentGuess variable?
+    // userTurn = guessHistory.length
+    // currentGuess = guessHistory.pop() -> To do (low priority): Can we use this instead of creating a separate currentGuess variable?
 let currentSuccess;
 // successHistory two-dimensional array to keep track of user successes, one nested array for each guess: 'red' indicates a red results peg (correct colour and index) and 'white' indicates a white results peg (correct colour, but not index)
 let successHistory;
-    // currentSuccess = successHistory.shift() -> To do (low priority): Use this instead of current Success variable?
+    // currentSuccess = successHistory.pop() -> To do (low priority): Use this instead of current Success variable?
 // message variable to display winning message
 let message;
 // colorChoice variable to temporarily store each color being chosen by user before being rendered to board
@@ -60,6 +60,7 @@ init();
 
 // init function to initialize state of the game
 function init() {
+    // Start with empty arrays for currentGuess and currentSuccess
     currentGuess = [];
     currentSuccess = [];
     // Start with an empty array for guessHistory. For each turn, add new 4-element array representing each guess to beginning of array
@@ -117,16 +118,17 @@ function renderSecretCode() {
 function renderCell() {
     // The length of currentGuess (1 to 4) indicates the col position, but we must subtract 1 to account for 0-based array index.
     const colIdx = currentGuess.length - 1;
-    // guessHistory is not updated with new currentGuess until user clicks the checkBtn. For example, in user's first turn, guessHistory array has no elements (length of 0) until the guess is checked. Therefore, color choice during first guess gets mapped to board's first row (at index 0).
+    // guessHistory is not updated with new currentGuess until the user clicks checkBtn. For example, in user's first turn, guessHistory array has no elements (length of 0) until the guess is checked. Therefore, color choice during first guess gets mapped to board's first row (at index 0).
     const rowIdx = guessHistory.length;
 
     // Generate ID corresponding to HTML cell and get the element
     const cellId = `c${colIdx}r${rowIdx}`;
     const cellEl = document.getElementById(cellId);
-    // Guard to prevent background color being updated when cellEl is null; e.g. when user clicks checkBtn
+    // Guard to prevent error when cellEl is null; e.g. when user clicks checkBtn
     if (cellEl) cellEl.style.backgroundColor = colorChoice;
 }
 
+// Render the red and white "results" pegs to the DOM
 function renderResults() {
     currentSuccess.forEach((successColor, idx) => {
         const resultsId = `r${successHistory.length - 1}-${idx}`;
@@ -154,6 +156,7 @@ function handleChoice(e) {
 
 // handleGuess function to compare currentGuess to secretCode
 function handleGuess() {
+    // Guard to prevent guess from being processed unless currentGuess is exactly 4 elements
     if (currentGuess.length !== 4) return;
     // Iterate over secretCode to generate array of red and white 'results' pegs
     secretCode.forEach((color, idx) => {
