@@ -1,6 +1,8 @@
 // See wireframe here:
 // https://miro.com/app/board/uXjVNdHUIDI=/?share_link_id=168631429658
 
+// Bugs: Need to add guard to checkBtn so that it can only be clicked after 4 colors have been selected (enhancement: button greyed out otherwise?)
+
 /*----- constants -----*/
 // Define the maximum number of guesses allowed
 const MAX_GUESSES = 10;
@@ -25,6 +27,8 @@ let successHistory;
     // currentSuccess = successHistory.shift()
 // message variable to display winning message
 let message;
+// colorChoice variable to temporarily store each color being chosen by user before being rendered to board
+let colorChoice;
 
 
 /*----- cached elements  -----*/
@@ -63,6 +67,7 @@ function init() {
     successHistory = [];
     // Clear the message
     message = '';
+    colorChoice = '';
     // Call a function that generates a secret color pattern
     generateSecretCode();
 
@@ -88,14 +93,14 @@ function generateSecretCode() {
 function render() {
     renderColorChoices();
     renderSecretCode();
-    renderBoard();
+    renderCell();
     renderMessage();
 }
 
 // Render color choices at bottom of board
 function renderColorChoices() {
-    colorChoiceArr.forEach((colorChoice, idx) => {
-        colorChoice.style.backgroundColor = COLORS[idx];
+    colorChoiceArr.forEach((color, idx) => {
+        color.style.backgroundColor = COLORS[idx];
     })
 }
 
@@ -106,9 +111,18 @@ function renderSecretCode() {
     })
 }
 
-// To do (high priority): Render empty board with 10 rows by 5 columns (4 columns for each colour of currentGuess and 1 column for the successTurn)
-function renderBoard() {
+// renderCell function to update board with color selected by user
+function renderCell() {
+    // The length of currentGuess (1 to 4) indicates the col position, but we must subtract 1 to account for 0-based array index.
+    const colIdx = currentGuess.length - 1;
+    // guessHistory is not updated with new currentGuess until user clicks the checkBtn. For example, in user's first turn, guessHistory array has no elements (length of 0) until the guess is checked. Therefore, color choice during first guess gets mapped to board's first row (at index 0).
+    const rowIdx = guessHistory.length;
 
+    // Generate ID corresponding to HTML cell and get the element
+    const cellId = `c${colIdx}r${rowIdx}`;
+    const cellEl = document.getElementById(cellId);
+    // Guard to prevent background color being updated when cellEl is null; e.g. when user clicks checkBtn
+    if (cellEl) cellEl.style.backgroundColor = colorChoice;
 }
 
 // Render message if user has won
@@ -120,40 +134,40 @@ function renderMessage() {
 
 // handleChoice function to create currentGuess array
 function handleChoice(e) {
-    const colorChoice = e.target.style.backgroundColor;
     if (e.target.tagName !== 'DIV') return;
-    if (currentGuess.length < 4) currentGuess.push(colorChoice);
+    if (currentGuess.length < 4) {
+        colorChoice = e.target.style.backgroundColor;
+        currentGuess.push(colorChoice); 
+    }
+    render(); // Question: Can I call renderCell() here instead of render to save processing time?
 }
+
 // checkWin function to compare currentGuess to secretCode
 function checkWin() {
     // If the currentGuess matches the secretCode, update to a win message and render it
-    console.log(currentGuess);
     if (currentGuess.join() === secretCode.join()) {
         message = 'Congrats - you guessed the secret code!';
-        renderMessage();
+        render();
         return;
     }
 
-    // To do (high priority):
     // if any of the currentGuess colours match the secretCode colours, then:
     secretCode.forEach((color, idx) => {
         if (currentGuess[idx] === color) {
+            // if they also match the index, add 1 to the red count in successTurn
             currentSuccess.r ? currentSuccess.r += 1 : currentSuccess.r = 1;
         } else if (currentGuess.includes(color)) {
+            // else, add 1 to the white count in successTurn
             currentSuccess.w ? currentSuccess.w += 1 : currentSuccess.w = 1;
         }
     });
-    console.log(currentSuccess);
-    // if they also match the index, add 1 to the red count in successTurn
-    // else, add 1 to the white count in successTurn
 
+    // Add currentGuess to guessHistory array and add currentSuccess to successHistory array
     guessHistory.unshift(currentGuess);
     successHistory.unshift(currentSuccess);
-    // Reset currentGuess to empty array, for next guess
+
+    // Reset currentGuess to empty array and currentSuccess to empy object for next guess
     currentGuess = [];
     currentSuccess = {};
-    console.log(guessHistory);
-    console.log(successHistory);
-
-    renderMessage();
+    render();
 }

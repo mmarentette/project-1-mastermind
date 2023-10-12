@@ -74,7 +74,7 @@ main * {
     grid-template-columns: repeat(2, 2vh);
     grid-template-rows: repeat(2, 2vh);
     gap: 0.5vh;
-    background-color: blueviolet;
+    background-color: lightgrey;
 }
 
 #color-choices {
