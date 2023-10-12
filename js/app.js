@@ -51,8 +51,8 @@ const messageEl = document.getElementById('message');
 // To do (medium priority): Listen for a click in the resetBtnEl and handleNewGame
 // Listen for a click in the colorsSectionEl and handleChoice
 colorsSectionEl.addEventListener('click', handleChoice);
-// Listen for a click in the checkBtnEl and checkWin
-checkBtn.addEventListener('click', checkWin);
+// Listen for a click in the checkBtnEl and handleGuess
+checkBtn.addEventListener('click', handleGuess);
 
 
 /*----- functions -----*/
@@ -152,8 +152,9 @@ function handleChoice(e) {
     renderCell(); // Question: Can I call renderCell() here instead of render to save processing time?
 }
 
-// checkWin function to compare currentGuess to secretCode
-function checkWin() {
+// handleGuess function to compare currentGuess to secretCode
+function handleGuess() {
+    if (currentGuess.length !== 4) return;
     // Iterate over secretCode to generate array of red and white 'results' pegs
     secretCode.forEach((color, idx) => {
         // In the guess, if the correct color is at the correct index...
@@ -177,7 +178,7 @@ function checkWin() {
     guessHistory.push(currentGuess);
     successHistory.push(currentSuccess);
 
-    // Reset currentGuess to empty array and currentSuccess to empy object for next guess
+    // Reset currentGuess and currentSuccess to empty arrays to store data for next guess
     currentGuess = [];
     
     render();
