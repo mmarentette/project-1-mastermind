@@ -21,16 +21,18 @@ const SECRET_CODE_LENGTH = 4;
 /*----- state variables -----*/
 // secretCode array to represent the randomly-generated colour pattern
 let secretCode;
+// secretCode display to represent whether grey circles or coloured circles should be displayed to user
+let secretCodeDisplay;
 // currentGuess array to represent the array of user-selected colours in the current turn
 let currentGuess;
 // guessHistory two-dimensional array to keep track of user guesses, one nested array for each guess
 let guessHistory;
     // userTurn = guessHistory.length
     // currentGuess = guessHistory.pop() -> To do (low priority): Can we use this instead of creating a separate currentGuess variable?
-let currentSuccess;
+let currentResults;
 // successHistory two-dimensional array to keep track of user successes, one nested array for each guess: 'red' indicates a red results peg (correct colour and index) and 'white' indicates a white results peg (correct colour, but not index)
 let successHistory;
-    // currentSuccess = successHistory.pop() -> To do (low priority): Use this instead of current Success variable?
+    // currentResults = successHistory.pop() -> To do (low priority): Use this instead of current Success variable?
 // message variable to display winning message
 let message;
 // colorChoice variable to temporarily store each color being chosen by user before being rendered to board
@@ -70,9 +72,9 @@ init();
 
 // init function to initialize state of the game
 function init() {
-    // Start with empty arrays for currentGuess and currentSuccess
+    // Start with empty arrays for currentGuess and currentResults
     currentGuess = [];
-    currentSuccess = [];
+    currentResults = [];
     // Start with an empty array for guessHistory. For each turn, add new 4-element array representing each guess to end of 2D array
     guessHistory = [];
     // Start with an empty for successHistory. For each turn, add a new array with up to 4 elements representing the results for each guess, to the end of 2D array
@@ -141,7 +143,7 @@ function renderCell() {
 
 // Render the red and white "results" pegs to the DOM
 function renderResults() {
-    currentSuccess.forEach((successColor, idx) => {
+    currentResults.forEach((successColor, idx) => {
         const resultsId = `r${successHistory.length - 1}-${idx}`;
         const resultsEl = document.getElementById(resultsId);
         resultsEl.style.backgroundColor = successColor;
@@ -167,26 +169,39 @@ function handleChoice(e) {
 function handleGuess() {
     // Guard to prevent guess from being processed unless currentGuess is exactly 4 elements
     if (currentGuess.length !== 4) return;
-
-    // Reset currentSuccess to empty array
-    currentSuccess = [];
-    // Add currentGuess to guessHistory array and add currentSuccess to successHistory array
+    // Reset currentResults to empty array
+    currentResults = [];
+    // Add currentGuess to guessHistory array and add currentResults to successHistory array
     guessHistory.push(currentGuess);
-    successHistory.push(currentSuccess);
-    // Iterate over secretCode to generate array of red and white 'results' pegs
-    secretCode.forEach((color, idx) => {
-        // In the guess, if the correct color is at the correct index...
-        if (currentGuess[idx] === color) {
-            // add 1 to the red count in successTurn
-            currentSuccess.push('red');
-        } else if (currentGuess.includes(color)) {
-            // else, add 1 to the white count in successTurn
-            currentSuccess.push('white');
-        }
-        // Sort currentSuccess array so that red pegs always appear first and white pegs always appear last. This also re-shuffles the array so that the user does not get an unfair advantage about the location of correct/incorrect colors in their guess
-        currentSuccess.sort();
-    });
+    successHistory.push(currentResults);
+    // Call processResults
+    processResults();
+    // Call updateMessage
+    updateMessage();
 
+    // Reset currentGuess and currentResults to empty arrays to store data for next guess
+    currentGuess = [];
+    
+    render();
+}
+
+function processResults() {
+        // Iterate over secretCode to generate array of red and white 'results' pegs
+        secretCode.forEach((color, idx) => {
+            // In the guess, if the correct color is at the correct index...
+            if (currentGuess[idx] === color) {
+                // add 1 to the red count in successTurn
+                currentResults.push('red');
+            } else if (currentGuess.includes(color)) {
+                // else, add 1 to the white count in successTurn
+                currentResults.push('white');
+            }
+            // Sort currentResults array so that red pegs always appear first and white pegs always appear last. This also re-shuffles the array so that the user does not get an unfair advantage about the location of correct/incorrect colors in their guess
+            currentResults.sort();
+        });
+}
+
+function updateMessage() {
     // If the currentGuess matches the secretCode, update to a win message
     if (currentGuess.join() === secretCode.join()) {
         message = 'Congrats - you guessed the secret code!';
@@ -197,11 +212,6 @@ function handleGuess() {
     } else {
         message = 'Not quite - try again!';
     }
-
-    // Reset currentGuess and currentSuccess to empty arrays to store data for next guess
-    currentGuess = [];
-    
-    render();
 }
 
 function handleReset() {
