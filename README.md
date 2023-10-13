@@ -2,13 +2,16 @@ MASTERMIND
 ===========
 Welcome to the challenging and thought-provoking game of **Mastermind**!
 
-Are you always two steps ahead? Do you enjoy your martinis shaken, not stirred? Do you have a closet full of lethal, high-tech gadgets?
+Are you always thinking two steps ahead? Do you enjoy your martinis shaken, not stirred? Do you have a closet full of trench coats and high-tech gadgets?
 
 If so, prove you have what it takes to be a secret service agent by cracking the code!
 
 Screenshots
 -----------
+Board at start of game:
 ![Start of game](https://i.imgur.com/zsU3vRd.png)
+
+Board during game play:
 ![Guesses and scores](https://i.imgur.com/4J3ARDh.png)
 
 Technologies Used
@@ -21,9 +24,9 @@ Getting Started
 ---------------
 [Play Mastermind now!](https://mmarentette.github.io/project-1-mastermind/)
 ### Instructions
-The game starts with a secret four-color code at the top of the board. In this version of Mastermind, each color in the secret code is not repeated.
+The game starts with a secret four-color code, hidden at the top of the board. In this version of Mastermind, no colors are repeated in the secret code.
 
-You have ten chances to crack the secret code! Make your first guess by choosing from the eight colors at the bottom of the board. Clicking on a color will make it appear in the current guess row. After selecting four colors, click the 'Check guess' button. You are allowed to include a color more than once in your guess, even though the four colors in the secret code are different.
+You have ten chances to crack the code. Make your first guess by choosing from the eight colors at the bottom of the board. Clicking on a color will make it appear in the current guess row. After selecting four colors, click the 'Check guess' button. You are allowed to include a color more than once in your guess, even though the secret code does not have repeated colors.
 
 The computer will score your guess. Each correct color in the correct spot will yield one red 'peg' in the far right column of the board. Each correct color in the incorrect spot will yield one white 'peg.' The order of the red and white pegs displayed on the board has no connection to the order of correct and incorrect colors in your guess.
 
