@@ -1,10 +1,10 @@
 // See wireframe here:
 // https://miro.com/app/board/uXjVNdHUIDI=/?share_link_id=168631429658
 
-// Ice box:
-// touch README.md (md = markdown) file in root directory
-// Medium priority: Allow users to clear currentGuess, as long as they have not yet clicked checkBtn
+// Icebox:
+// High priority: touch README.md (md = markdown) file in root directory
 // Medium priority: Add CSS keyframe animation for message
+// Medium priority: Add instructions for game play that can be toggled visible/hidden (perhaps through pop-up)
 // Low priority: Grey out check guess button is not clickable if <4 colors selected in currentGuess
 // Low priority: Prevent users from being able to select more colors (render to game board) after they have won
 // Low priority: Allow users to choose easy or difficult mode; difficult mode would allow each color to appear 1+ times in the secretCode.
