@@ -2,9 +2,9 @@
 // https://miro.com/app/board/uXjVNdHUIDI=/?share_link_id=168631429658
 
 // Ice box:
-// High priority: 'Hide' the secretCode and only render after the user has won OR after 10 guesses have been made.
 // touch README.md (md = markdown) file in root directory
 // Medium priority: Allow users to clear currentGuess, as long as they have not yet clicked checkBtn
+// Medium priority: Add CSS keyframe animation for message
 // Low priority: Grey out check guess button is not clickable if <4 colors selected in currentGuess
 // Low priority: Prevent users from being able to select more colors (render to game board) after they have won
 // Low priority: Allow users to choose easy or difficult mode; difficult mode would allow each color to appear 1+ times in the secretCode.
@@ -43,13 +43,15 @@ let colorChoice;
 
 /*----- cached elements  -----*/
 // Store the color choice array (colorOptionsArr) that contains the 8 clickable colour elements at the bottom of the board
-const colorOptionsArr = [...document.querySelectorAll('#color-choices > div')];
+const colorOptionsArr = [...document.querySelectorAll('#color-options > div')];
 // Store the color choice section (to be used in event listener)
-const colorsSectionEl = document.getElementById('color-choices');
+const colorsSectionEl = document.getElementById('color-options');
 // Store the secret code array (secretCodeArr) at the top of the board
 const secretCodeArr = [...document.querySelectorAll('#secret-code > div')];
 // Store the button (checkBtn) that compares currentGuess to secretCode and checks for a win
 const checkBtn = document.getElementById('check');
+// Store the button (clearBtn) that can delete the currentGuess
+const clearBtn = document.getElementById('clear');
 // Store the message element that displays the win message
 const messageEl = document.getElementById('message');
 // Store the button (resetBtn) that resets the game
@@ -65,8 +67,10 @@ const resultsDivArr = [...document.querySelectorAll('#results > section > div')]
 resetBtn.addEventListener('click', handleReset);
 // Listen for a click in the colorsSectionEl and handleChoice
 colorsSectionEl.addEventListener('click', handleChoice);
-// Listen for a click in the checkBtnEl and handleGuess
+// Listen for a click in checkBtn and handleGuess
 checkBtn.addEventListener('click', handleGuess);
+// Listen for a click in clearBtn and clearGuess
+clearBtn.addEventListener('click', clearGuess);
 
 
 /*----- functions -----*/
@@ -233,4 +237,15 @@ function clearColors(divArr) {
     divArr.forEach((div) => {
         div.style.backgroundColor = '';
     })
+}
+
+function clearGuess() {
+    // Store all the divs that end with r${guessHistory.length} in a variable - i.e. all the guessDivs in the current guess row
+    const guessDivArr = [...document.querySelectorAll(`[id$=r${guessHistory.length}]`)];
+    // Iterate through these divs and remove their background color
+    guessDivArr.forEach((guessDiv) => {
+        guessDiv.style.backgroundColor = '';
+    })
+    // Reset currentGuess to an empty array
+    currentGuess = [];
 }
