@@ -54,19 +54,20 @@ button {
     top: 1vh;
 }
 
-@keyframes mid-pop-up {
-    from {background-color: ''}
-    to {
-        background-color: darkgrey;
-        z-index: 1;
-    }
+@keyframes pop-up {
+    from {opacity: 0;}
+    to {opacity: 1;}
 }
 
 #message {
     margin: 0.5vh auto 2vh;
     font-size: 3vh;
-    animation-name: mid-pop-up;
-    animation-duration: 4s;
+}
+
+.pop-up {
+    animation-name: pop-up;
+    animation-duration: 1.5s;
+    animation-timing-function: ease-in-out;
 }
 
 #secret-code {

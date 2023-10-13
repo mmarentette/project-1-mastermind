@@ -176,8 +176,8 @@ function handleGuess() {
     successHistory.push(currentResults);
     // Call processResults
     processResults();
-    // Call updateMessage
-    updateMessage();
+    // Call checkWin
+    checkWin();
 
     // Reset currentGuess and currentResults to empty arrays to store data for next guess
     currentGuess = [];
@@ -201,7 +201,7 @@ function processResults() {
         });
 }
 
-function updateMessage() {
+function checkWin() {
     // If the currentGuess matches the secretCode, update to a win message
     if (currentGuess.join() === secretCode.join()) {
         message = 'Congrats - you cracked the code!';
