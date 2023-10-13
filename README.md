@@ -1,12 +1,15 @@
 MASTERMIND
 ===========
 Welcome to the challenging and thought-provoking game of **Mastermind**!
-Do you always think two steps ahead? Do you like your martinis shaken, not stirred? Do you have a closet full of high-tech, lethal gadgets?
-If so, see if you have what it takes to be a spy by cracking the code!
+
+Are you always two steps ahead? Do you enjoy your martinis shaken, not stirred? Do you have a closet full of lethal, high-tech gadgets?
+
+If so, prove you have what it takes to be a secret service agent by cracking the code!
 
 Screenshots
 -----------
-
+![Start of game](https://i.imgur.com/zsU3vRd.png)
+![Guesses and scores](https://i.imgur.com/4J3ARDh.png)
 
 Technologies Used
 -----------------
@@ -16,17 +19,32 @@ Technologies Used
 
 Getting Started
 ---------------
+[Play Mastermind now!](https://mmarentette.github.io/project-1-mastermind/)
+### Instructions
+The game starts with a secret four-color code at the top of the board. In this version of Mastermind, each color in the secret code is not repeated.
+
+You have ten chances to crack the secret code! Make your first guess by choosing from the eight colors at the bottom of the board. Clicking on a color will make it appear in the current guess row. After selecting four colors, click the 'Check guess' button. You are allowed to include a color more than once in your guess, even though the four colors in the secret code are different.
+
+The computer will score your guess. Each correct color in the correct spot will yield one red 'peg' in the far right column of the board. Each correct color in the incorrect spot will yield one white 'peg.' The order of the red and white pegs displayed on the board has no connection to the order of correct and incorrect colors in your guess.
+
+Make another guess, and the computer will score it again. Repeat this process until you successfully guess the secret code... or until you run out of guesses.
+
+Good luck!
+
 
 Next Steps
 ----------
-1. Medium priority: Add CSS keyframe animation for message; also addresses issue of no user feedback after checking a guess with no correct colors
-2. Medium priority: Add instructions for game play that can be toggled visible/hidden (perhaps through pop-up)
-3. Low priority: Grey out check guess button if <4 colors selected in currentGuess
-4. Low priority: Prevent users from being able to select more colors (render to game board) after they have won
-5. Low priority: Allow users to choose easy or difficult mode; difficult mode would allow each color to appear 1+ times in the secretCode.
-6. Low priority (or perhaps not needed): Add a StartGame button, event listener and handleNewGame function
+### Medium Priority:
+1. Add CSS keyframe animations to display try again/win/loss message. Beyond style, this has an additional benefit of providing the user feedback after checking a guess with no corresponding colors in the secretCode (since no white or red pegs would display).
+2. Add instructions for game play that can be toggled visible/hidden (perhaps through a pop-up).
+### Low Priority:
+1. Provide visual feedback not to click 'Check guess' button (such as 'cursor: not-allowed') if fewer than four colors have been selected in currentGuess.
+2. Prevent color choices from being rendered to the board after a user has won, if they have not reset the game yet.
+3. Create a toggle for easy and difficult modes. The current mode is easy mode (each color can appear only once in the secretCode). Difficult mode would allow each color to appear one or more times in the secretCode.
+4. Fix blue font in text of buttons rendered on mobile devices.
+5. Add a StartGame button, event listener and handleNewGame function (but perhaps not necessary).
 
 Wireframe
 ---------
-// See wireframe [here](https://miro.com/app/board/uXjVNdHUIDI=/?share_link_id=168631429658)
+See wireframe [here](https://miro.com/app/board/uXjVNdHUIDI=/?share_link_id=168631429658)
 

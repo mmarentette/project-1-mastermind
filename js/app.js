@@ -204,11 +204,11 @@ function processResults() {
 function updateMessage() {
     // If the currentGuess matches the secretCode, update to a win message
     if (currentGuess.join() === secretCode.join()) {
-        message = 'Congrats - you guessed the secret code!';
+        message = 'Congrats - you cracked the code!';
         secretCodeDisplay = secretCode.slice();
     // Else if user has made all 10 guesses without getting the secretCode, update to a lose message
     } else if (guessHistory.length === MAX_GUESSES) {
-        message = 'You ran out of guesses - better luck next time!';
+        message = 'Game over - better luck next time!';
         secretCodeDisplay = secretCode.slice();
     // Otherwise, update to a try again message
     } else {
