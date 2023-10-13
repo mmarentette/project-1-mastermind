@@ -12,7 +12,7 @@ Board at start of game:
 ![Start of game](https://i.imgur.com/zsU3vRd.png)
 
 Board during game play:
-![Guesses and scores](https://i.imgur.com/Qgu8yOb.png)
+![Guesses and scores](https://i.imgur.com/cg7Hea2.png)
 
 Technologies Used
 -----------------
