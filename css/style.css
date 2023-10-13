@@ -110,6 +110,8 @@ button {
 
 #color-options > div:hover {
     cursor: pointer;
+    transform: scale(1.2);
+    transition: transform 150ms ease-in;
 }
 
 button:hover {
