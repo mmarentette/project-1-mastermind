@@ -92,16 +92,16 @@ button {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    gap: 1vh;
+    gap: 0.6vh;
     border-radius: 1.5vh;
     background-color: darkgrey;
 }
 
 #results > section {
     display: grid;
-    grid-template-columns: repeat(2, 1.5vh);
-    grid-template-rows: repeat(2, 1.5vh);
-    gap: 0.5vh;
+    grid-template-columns: repeat(2, 1.6vh);
+    grid-template-rows: repeat(2, 1.6vh);
+    gap: 0.3vh;
 }
 
 #color-options {
@@ -130,6 +130,10 @@ button {
     cursor: pointer;
     transform: scale(1.2);
     transition: transform 150ms ease-in;
+}
+
+[id^="result-"] > div {
+    border-width: 0.3vh;
 }
 
 button:hover {

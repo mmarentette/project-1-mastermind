@@ -1,15 +1,3 @@
-// See wireframe here:
-// https://miro.com/app/board/uXjVNdHUIDI=/?share_link_id=168631429658
-
-// Icebox:
-// High priority: touch README.md (md = markdown) file in root directory
-// Medium priority: Add CSS keyframe animation for message
-// Medium priority: Add instructions for game play that can be toggled visible/hidden (perhaps through pop-up)
-// Low priority: Grey out check guess button is not clickable if <4 colors selected in currentGuess
-// Low priority: Prevent users from being able to select more colors (render to game board) after they have won
-// Low priority: Allow users to choose easy or difficult mode; difficult mode would allow each color to appear 1+ times in the secretCode.
-// Low priority (or perhaps not needed): Listen for a click in the startGame button and handleNewGame
-
 /*----- constants -----*/
 // Define the maximum number of guesses allowed
 const MAX_GUESSES = 10;
@@ -220,7 +208,7 @@ function updateMessage() {
         secretCodeDisplay = secretCode.slice();
     // Else if user has made all 10 guesses without getting the secretCode, update to a lose message
     } else if (guessHistory.length === MAX_GUESSES) {
-        message = 'No more guesses left - you lose!';
+        message = 'You ran out of guesses - better luck next time!';
         secretCodeDisplay = secretCode.slice();
     // Otherwise, update to a try again message
     } else {
