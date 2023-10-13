@@ -17,14 +17,14 @@ const MAX_GUESSES = 10;
 const COLORS = ['red', 'darkorange', 'yellow', 'green', 'blue', 'aqua','purple', 'hotpink']
 // Define the length of the secret code
 const SECRET_CODE_LENGTH = 4;
-const SECRET_COLOR_DISPLAY = 'black'; // PACEMAKER
+const SECRET_COLOR_DISPLAY = 'black';
 
 
 /*----- state variables -----*/
 // secretCode array to represent the randomly-generated colour pattern
 let secretCode;
 // secretCodeDisplay array to represent whether grey circles or coloured circles should be displayed to user
-let secretCodeDisplay; // PACEMAKER
+let secretCodeDisplay;
 // currentGuess array to represent the array of user-selected colours in the current turn
 let currentGuess;
 // guessHistory two-dimensional array to keep track of user guesses, one nested array for each guess
@@ -111,6 +111,7 @@ function generateSecretCode() {
     };
 }
 
+// secretCodeDisplay array with four of the same color (determined in constants) to be rendered to DOM during game play before user wins/loses
 function generateSecretCodeDisplay() {
     secretCodeDisplay = Array.from({ length:4 }, (x) => SECRET_COLOR_DISPLAY)
 }
@@ -216,11 +217,11 @@ function updateMessage() {
     // If the currentGuess matches the secretCode, update to a win message
     if (currentGuess.join() === secretCode.join()) {
         message = 'Congrats - you guessed the secret code!';
-        secretCodeDisplay = secretCode.slice(); // PACEMAKER
+        secretCodeDisplay = secretCode.slice();
     // Else if user has made all 10 guesses without getting the secretCode, update to a lose message
     } else if (guessHistory.length === MAX_GUESSES) {
         message = 'No more guesses left - you lose!';
-        secretCodeDisplay = secretCode.slice(); // PACEMAKER
+        secretCodeDisplay = secretCode.slice();
     // Otherwise, update to a try again message
     } else {
         message = 'Not quite - try again!';
